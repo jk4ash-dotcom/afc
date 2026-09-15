@@ -1,0 +1,267 @@
+{
+  "title": "Holy Rosary — Traditional English (with AFC after-Rosary set)",
+  "sources": [
+    "https://www.usccb.org/how-to-pray-the-rosary",
+    "https://www.thedivinemercy.org/message/devotions/pray-the-chaplet",
+    "https://afc.org/wp-content/uploads/2025/07/323-127_DiscipleMembershipBooklet_2025_LoRes.pdf",
+    "https://afc.org/live-consecration/"
+  ],
+  "mysteriesByDay": {
+    "Monday": "Joyful",
+    "Tuesday": "Sorrowful",
+    "Wednesday": "Glorious",
+    "Thursday": "Luminous",
+    "Friday": "Sorrowful",
+    "Saturday": "Joyful",
+    "Sunday": "Glorious",
+    "notes": "USCCB also notes: Joyful on Sundays of Advent; Sorrowful on Sundays of Lent; Glorious on Sundays outside Advent and Lent."
+  },
+  "mysterySets": {
+    "Joyful": {
+      "days": [
+        "Monday",
+        "Saturday"
+      ],
+      "mysteries": [
+        {
+          "name": "The Annunciation",
+          "fruit": "Humility"
+        },
+        {
+          "name": "The Visitation",
+          "fruit": "Love of Neighbor"
+        },
+        {
+          "name": "The Nativity",
+          "fruit": "Poverty"
+        },
+        {
+          "name": "The Presentation in the Temple",
+          "fruit": "Purity of Heart and Body"
+        },
+        {
+          "name": "The Finding in the Temple",
+          "fruit": "Devotion to Jesus"
+        }
+      ]
+    },
+    "Sorrowful": {
+      "days": [
+        "Tuesday",
+        "Friday"
+      ],
+      "mysteries": [
+        {
+          "name": "The Agony in the Garden",
+          "fruit": "Obedience to God's Will"
+        },
+        {
+          "name": "The Scourging at the Pillar",
+          "fruit": "Mortification"
+        },
+        {
+          "name": "The Crowning with Thorns",
+          "fruit": "Courage"
+        },
+        {
+          "name": "The Carrying of the Cross",
+          "fruit": "Patience"
+        },
+        {
+          "name": "The Crucifixion and Death",
+          "fruit": "Sorrow for our Sins"
+        }
+      ]
+    },
+    "Glorious": {
+      "days": [
+        "Wednesday",
+        "Sunday"
+      ],
+      "mysteries": [
+        {
+          "name": "The Resurrection",
+          "fruit": "Faith"
+        },
+        {
+          "name": "The Ascension",
+          "fruit": "Hope"
+        },
+        {
+          "name": "The Descent of the Holy Spirit",
+          "fruit": "Wisdom"
+        },
+        {
+          "name": "The Assumption",
+          "fruit": "Devotion to Mary"
+        },
+        {
+          "name": "The Coronation of Mary",
+          "fruit": "Grace of a happy death"
+        }
+      ]
+    },
+    "Luminous": {
+      "days": [
+        "Thursday"
+      ],
+      "mysteries": [
+        {
+          "name": "The Baptism of Christ in the Jordan",
+          "fruit": "Openness to the Holy Spirit"
+        },
+        {
+          "name": "The Wedding Feast at Cana",
+          "fruit": "To Jesus through Mary"
+        },
+        {
+          "name": "Jesus' Proclamation of the Coming of the Kingdom of God",
+          "fruit": "Conversion"
+        },
+        {
+          "name": "The Transfiguration",
+          "fruit": "Desire for holiness"
+        },
+        {
+          "name": "The Institution of the Eucharist",
+          "fruit": "Adoration"
+        }
+      ]
+    }
+  },
+  "beadSequenceTemplate": [
+    {
+      "order": 1,
+      "bead": "crucifix",
+      "action": "Sign of the Cross",
+      "prayerId": "sign-of-cross"
+    },
+    {
+      "order": 2,
+      "bead": "crucifix",
+      "action": "Apostles' Creed",
+      "prayerId": "apostles-creed"
+    },
+    {
+      "order": 3,
+      "bead": "first-large",
+      "action": "Our Father",
+      "prayerId": "our-father"
+    },
+    {
+      "order": 4,
+      "bead": "three-small",
+      "action": "Three Hail Marys (Faith, Hope, Charity)",
+      "prayerId": "hail-mary",
+      "repeat": 3
+    },
+    {
+      "order": 5,
+      "bead": "chain",
+      "action": "Glory Be",
+      "prayerId": "glory-be"
+    },
+    {
+      "order": 6,
+      "bead": "decade-loop",
+      "action": "For each of 5 decades: announce Mystery; Our Father; 10 Hail Marys; Glory Be; Fatima Prayer",
+      "parts": [
+        "announce-mystery",
+        "our-father",
+        "hail-mary-x10",
+        "glory-be",
+        "fatima-prayer"
+      ]
+    },
+    {
+      "order": 7,
+      "bead": "after-decades",
+      "action": "Hail Holy Queen + concluding dialogue and prayer",
+      "prayerIds": [
+        "hail-holy-queen",
+        "rosary-concluding-prayer"
+      ]
+    },
+    {
+      "order": 8,
+      "bead": "optional-afc",
+      "action": "Optional AFC after-Rosary set",
+      "prayerIds": [
+        "all-for",
+        "st-joseph-after-rosary",
+        "act-of-contrition"
+      ]
+    }
+  ],
+  "prayers": {
+    "sign-of-cross": {
+      "title": "Sign of the Cross",
+      "sourceUrl": "https://www.usccb.org/how-to-pray-the-rosary",
+      "body": "In the name of the Father, and of the Son, and of the Holy Spirit. Amen."
+    },
+    "apostles-creed": {
+      "title": "Apostles' Creed",
+      "sourceUrl": "https://www.thedivinemercy.org/message/devotions/pray-the-chaplet",
+      "body": "I believe in God, the Father almighty, Creator of Heaven and earth, and in Jesus Christ, His only Son, our Lord, who was conceived by the Holy Spirit, born of the Virgin Mary, suffered under Pontius Pilate, was crucified, died and was buried; He descended into hell; on the third day He rose again from the dead; He ascended into Heaven, and is seated at the right hand of God the Father almighty; from there He will come to judge the living and the dead. I believe in the Holy Spirit, the holy Catholic Church, the Communion of Saints, the forgiveness of sins, the Resurrection of the body, and life everlasting. Amen."
+    },
+    "our-father": {
+      "title": "Our Father",
+      "sourceUrl": "https://www.thedivinemercy.org/message/devotions/pray-the-chaplet",
+      "body": "Our Father, Who art in Heaven, hallowed be Thy name; Thy kingdom come; Thy will be done on earth as it is in Heaven. Give us this day our daily bread; and forgive us our trespasses, as we forgive those who trespass against us; and lead us not into temptation, but deliver us from evil, Amen."
+    },
+    "hail-mary": {
+      "title": "Hail Mary",
+      "sourceUrl": "https://www.thedivinemercy.org/message/devotions/pray-the-chaplet",
+      "body": "Hail Mary, full of grace. The Lord is with thee. Blessed art thou amongst women, and blessed is the fruit of thy womb, Jesus. Holy Mary, Mother of God, pray for us sinners, now and at the hour of our death, Amen."
+    },
+    "glory-be": {
+      "title": "Glory Be",
+      "sourceUrl": "https://www.usccb.org/how-to-pray-the-rosary",
+      "note": "Traditional English form widely used with the Rosary; USCCB page names the prayer but does not print the full text on that page.",
+      "body": "Glory be to the Father, and to the Son, and to the Holy Spirit, as it was in the beginning, is now, and ever shall be, world without end. Amen."
+    },
+    "fatima-prayer": {
+      "title": "Fatima Prayer (Decade Prayer)",
+      "sourceUrl": "https://www.usccb.org/how-to-pray-the-rosary",
+      "body": "O my Jesus, forgive us our sins, save us from the fires of hell; lead all souls to Heaven, especially those who have most need of your mercy."
+    },
+    "hail-holy-queen": {
+      "title": "Hail Holy Queen (Salve Regina)",
+      "sourceUrl": "https://afc.org/wp-content/uploads/2025/07/323-127_DiscipleMembershipBooklet_2025_LoRes.pdf",
+      "body": "Hail Holy Queen, Mother of mercy; our life, our sweetness, and our hope. To thee do we cry, poor banished children of Eve. To thee do we send up our sighs, mourning, and weeping in this valley of tears.\n\nTurn then, most gracious advocate, thine eyes of mercy toward us; and after this our exile, show unto us the blessed fruit of thy womb, Jesus. O clement, O loving, O sweet Virgin Mary.\n\nV. Pray for us, O Holy Mother of God.\nR. That we may be made worthy of the promises of Christ."
+    },
+    "rosary-concluding-prayer": {
+      "title": "Concluding Rosary Prayer",
+      "sourceUrl": "https://www.usccb.org/how-to-pray-the-rosary",
+      "body": "Let us pray: O God, whose Only Begotten Son, by his life, Death, and Resurrection, has purchased for us the rewards of eternal life, grant, we beseech thee, that while meditating on these mysteries of the most holy Rosary of the Blessed Virgin Mary, we may imitate what they contain and obtain what they promise, through the same Christ our Lord. Amen."
+    }
+  },
+  "afterRosarySet": {
+    "description": "AFC Prayers after the Rosary as listed in the Disciple Membership Booklet (All For after Fatima Prayer / after decades; then Hail Holy Queen; St. Joseph after Rosary; Act of Contrition).",
+    "sourceUrl": "https://afc.org/wp-content/uploads/2025/07/323-127_DiscipleMembershipBooklet_2025_LoRes.pdf",
+    "prayers": [
+      {
+        "id": "all-for",
+        "title": "All For Consecration Prayer",
+        "when": "Say after the Fatima Rosary Prayer (per AFC booklet); also used as short daily renewal",
+        "body": "All for the Sacred and Eucharistic Heart of Jesus, all through the Sorrowful and Immaculate Heart of Mary, all in union with St. Joseph."
+      },
+      {
+        "id": "hail-holy-queen",
+        "title": "Hail Holy Queen",
+        "when": "Say after the Rosary",
+        "ref": "prayers.hail-holy-queen"
+      },
+      {
+        "id": "st-joseph-after-rosary",
+        "title": "St. Joseph Prayer after the Rosary",
+        "body": "Glorious St. Joseph, spouse of the Immaculate Virgin, obtain for me and all the members of my family and loved ones, a confident, sinless, generous, and patient heart, and perfect resignation to the Divine Will. Be our guide, father, and model throughout life, that we may merit a death like yours, in the arms of Jesus and Mary. Help us, St. Joseph, in our earthly strife, to fulfill our responsibilities and ever to lead a pure and blameless life. (pause)\n\nHeavenly Father, please ask the Holy Spirit, who resides in the innermost recesses of my soul, to help me to call to mind all of my sins and faults. Help me to detach myself from these faults and sins so that I can be a useful instrument in the hands of the Most Holy Family, to achieve Your distinctive plan for my life. Let me now pause for a few moments to think of my sins, faults, and omissions. (Pause for a short reflection; then pray the Act of Contrition.)"
+      },
+      {
+        "id": "act-of-contrition",
+        "title": "Act of Contrition",
+        "body": "Oh my God! I am heartily sorry for having offended Thee, and I detest all of my sins, because I dread the loss of Heaven and the pains of hell, but most of all because they have offended Thee, my God, who art all-good and deserving of all my love. I firmly resolve with the help of Thy grace, to confess my sins, to do penance, to amend my life. Amen."
+      }
+    ]
+  }
+}
