@@ -38,6 +38,11 @@ object GuidedStepBuilder {
         }
         steps += GuidedStep(prayerTitle("glory-be"), "Opening", prayerBody("glory-be"))
 
+        // AFC practice: All For after each decade's Fatima (always for this app's
+        // guided Rosary). Still strip All For from the trailing after-Rosary set
+        // so it is not duplicated as an end-only 6th copy.
+        val allFor = rosary.afterRosarySet?.prayers?.find { it.id == "all-for" }
+
         set.mysteries.forEachIndexed { decadeIndex, mystery ->
             val decadeLabel = "Decade ${decadeIndex + 1} of 5 — $setName"
             steps += GuidedStep(
@@ -59,6 +64,12 @@ object GuidedStepBuilder {
             }
             steps += GuidedStep(prayerTitle("glory-be"), decadeLabel, prayerBody("glory-be"))
             steps += GuidedStep(prayerTitle("fatima-prayer"), decadeLabel, prayerBody("fatima-prayer"))
+            allFor?.let { p ->
+                val body = p.body.orEmpty()
+                if (body.isNotBlank()) {
+                    steps += GuidedStep(p.title, decadeLabel, body)
+                }
+            }
         }
 
         steps += GuidedStep(prayerTitle("hail-holy-queen"), "Closing", prayerBody("hail-holy-queen"))
@@ -70,6 +81,7 @@ object GuidedStepBuilder {
 
         if (includeAfterRosary) {
             rosary.afterRosarySet?.prayers?.forEach { p ->
+                if (p.id == "all-for") return@forEach // already after each Fatima
                 val body = p.body
                     ?: p.ref?.removePrefix("prayers.")?.let { prayers[it]?.body }
                     ?: ""

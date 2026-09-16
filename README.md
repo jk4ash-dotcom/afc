@@ -61,7 +61,7 @@ adb install -r app/build/outputs/apk/debug/app-debug.apk
 
 - Home sections: AFC Prayers, Rosary, Divine Mercy, About
 - AFC prayer list → scrollable detail (offline JSON)
-- Rosary: mysteries by day (incl. Luminous), guided bead-by-bead with Next/Previous & progress; optional AFC after-Rosary set
+- Rosary: mysteries by day (incl. Luminous), guided bead-by-bead with Next/Previous & progress; **All For after each decade's Fatima** (AFC practice, always); optional AFC after-Rosary set (Hail Holy Queen, St. Joseph, Act of Contrition — All For is not end-only)
 - Divine Mercy: guided Chaplet bead flow; Hour of Great Mercy screen
 - Calm, family-friendly UI with large readable type
 - No network calls for core prayer content

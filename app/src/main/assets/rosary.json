@@ -163,13 +163,14 @@
     {
       "order": 6,
       "bead": "decade-loop",
-      "action": "For each of 5 decades: announce Mystery; Our Father; 10 Hail Marys; Glory Be; Fatima Prayer",
+      "action": "For each of 5 decades: announce Mystery; Our Father; 10 Hail Marys; Glory Be; Fatima Prayer; All For (AFC)",
       "parts": [
         "announce-mystery",
         "our-father",
         "hail-mary-x10",
         "glory-be",
-        "fatima-prayer"
+        "fatima-prayer",
+        "all-for"
       ]
     },
     {
@@ -184,9 +185,9 @@
     {
       "order": 8,
       "bead": "optional-afc",
-      "action": "Optional AFC after-Rosary set",
+      "action": "Optional AFC after-Rosary set (All For is per-decade after Fatima, not repeated here)",
       "prayerIds": [
-        "all-for",
+        "hail-holy-queen",
         "st-joseph-after-rosary",
         "act-of-contrition"
       ]

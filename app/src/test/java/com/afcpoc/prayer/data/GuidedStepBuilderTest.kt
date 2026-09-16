@@ -85,6 +85,69 @@ class GuidedStepBuilderTest {
     }
 
     @Test
+    fun rosary_allFor_appearsExactlyFiveTimes_immediatelyAfterEachFatima() {
+        val allForBody = rosary.afterRosarySet!!.prayers.find { it.id == "all-for" }!!.body!!
+        // Always inserted for AFC guided Rosary (even without after-Rosary overlay)
+        val steps = GuidedStepBuilder.buildRosarySteps(rosary, "Joyful", includeAfterRosary = false)
+        val allForSteps = steps.filter {
+            it.title.contains("All For", ignoreCase = true) || it.body.trim() == allForBody.trim()
+        }
+        assertEquals("All For must appear exactly 5 times (once per decade)", 5, allForSteps.size)
+
+        // Each All For immediately follows a Fatima step within that decade
+        for (d in 1..5) {
+            val decade = steps.filter { it.subtitle == "Decade $d of 5 — Joyful" }
+            val fatimaIdx = decade.indexOfFirst {
+                it.title.contains("Fatima", ignoreCase = true) ||
+                    it.body.contains("O my Jesus", ignoreCase = true)
+            }
+            assertTrue("decade $d missing Fatima", fatimaIdx >= 0)
+            assertTrue(
+                "decade $d: All For must immediately follow Fatima",
+                fatimaIdx + 1 < decade.size
+            )
+            val after = decade[fatimaIdx + 1]
+            assertTrue(
+                "decade $d expected All For after Fatima, got '${after.title}'",
+                after.title.contains("All For", ignoreCase = true) ||
+                    after.body.trim() == allForBody.trim()
+            )
+        }
+
+        // Not only-at-end: last All For must still be inside a decade subtitle, before Closing
+        val lastAllFor = steps.indexOfLast {
+            it.title.contains("All For", ignoreCase = true) || it.body.trim() == allForBody.trim()
+        }
+        val firstClosing = steps.indexOfFirst { it.subtitle == "Closing" }
+        assertTrue(lastAllFor >= 0 && firstClosing > lastAllFor)
+        assertTrue(steps[lastAllFor].subtitle!!.startsWith("Decade"))
+    }
+
+    @Test
+    fun rosary_afterRosary_keepsHailHolyQueenStJosephContrition_withoutTrailingAllFor() {
+        val allForBody = rosary.afterRosarySet!!.prayers.find { it.id == "all-for" }!!.body!!
+        val with = GuidedStepBuilder.buildRosarySteps(rosary, "Sorrowful", includeAfterRosary = true)
+        val trailing = with.filter { it.subtitle == "AFC after-Rosary" }
+        assertTrue(trailing.isNotEmpty())
+        assertFalse(
+            "All For must not appear in trailing after-Rosary set",
+            trailing.any {
+                it.title.contains("All For", ignoreCase = true) ||
+                    it.body.trim() == allForBody.trim()
+            }
+        )
+        assertTrue(trailing.any { it.title.contains("Hail Holy Queen", ignoreCase = true) })
+        assertTrue(trailing.any { it.title.contains("St. Joseph", ignoreCase = true) })
+        assertTrue(trailing.any { it.title.contains("Act of Contrition", ignoreCase = true) })
+
+        // Still exactly 5 All For copies total (per-decade only)
+        val allForCount = with.count {
+            it.title.contains("All For", ignoreCase = true) || it.body.trim() == allForBody.trim()
+        }
+        assertEquals(5, allForCount)
+    }
+
+    @Test
     fun chaplet_core_hasFiveDecades_ofTenBeads() {
         val steps = GuidedStepBuilder.buildChapletSteps(
             divineMercy,
