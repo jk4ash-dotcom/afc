@@ -93,7 +93,7 @@ fun AboutScreen(onBack: () -> Unit) {
             )
             Spacer(Modifier.height(24.dp))
             Text(
-                "Version 1.0.3-poc · Package com.afcpoc.prayer",
+                "Version 1.0.4-poc · Package com.afcpoc.prayer",
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )

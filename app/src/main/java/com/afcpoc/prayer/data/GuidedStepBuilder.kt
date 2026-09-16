@@ -81,7 +81,8 @@ object GuidedStepBuilder {
 
         if (includeAfterRosary) {
             rosary.afterRosarySet?.prayers?.forEach { p ->
-                if (p.id == "all-for") return@forEach // already after each Fatima
+                // All For already after each Fatima; HHQ already in Closing
+                if (p.id == "all-for" || p.id == "hail-holy-queen") return@forEach
                 val body = p.body
                     ?: p.ref?.removePrefix("prayers.")?.let { prayers[it]?.body }
                     ?: ""

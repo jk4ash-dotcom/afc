@@ -124,7 +124,7 @@ class GuidedStepBuilderTest {
     }
 
     @Test
-    fun rosary_afterRosary_keepsHailHolyQueenStJosephContrition_withoutTrailingAllFor() {
+    fun rosary_afterRosary_stJosephContrition_withoutTrailingHhqOrAllFor() {
         val allForBody = rosary.afterRosarySet!!.prayers.find { it.id == "all-for" }!!.body!!
         val with = GuidedStepBuilder.buildRosarySteps(rosary, "Sorrowful", includeAfterRosary = true)
         val trailing = with.filter { it.subtitle == "AFC after-Rosary" }
@@ -136,15 +136,54 @@ class GuidedStepBuilderTest {
                     it.body.trim() == allForBody.trim()
             }
         )
-        assertTrue(trailing.any { it.title.contains("Hail Holy Queen", ignoreCase = true) })
+        assertFalse(
+            "Hail Holy Queen must not appear again in trailing after-Rosary (Closing only)",
+            trailing.any { it.title.contains("Hail Holy Queen", ignoreCase = true) }
+        )
         assertTrue(trailing.any { it.title.contains("St. Joseph", ignoreCase = true) })
         assertTrue(trailing.any { it.title.contains("Act of Contrition", ignoreCase = true) })
+
+        // Closing still has exactly one HHQ, before the overlay
+        val hhqIndices = with.withIndex().filter { (_, s) ->
+            s.title.contains("Hail Holy Queen", ignoreCase = true)
+        }.map { it.index }
+        assertEquals("HHQ must appear exactly once (Closing)", 1, hhqIndices.size)
+        val hhqIdx = hhqIndices.single()
+        assertEquals("Closing", with[hhqIdx].subtitle)
+        val firstOverlay = with.indexOfFirst { it.subtitle == "AFC after-Rosary" }
+        assertTrue("Closing HHQ must precede after-Rosary overlay", hhqIdx < firstOverlay)
 
         // Still exactly 5 All For copies total (per-decade only)
         val allForCount = with.count {
             it.title.contains("All For", ignoreCase = true) || it.body.trim() == allForBody.trim()
         }
         assertEquals(5, allForCount)
+    }
+
+    @Test
+    fun rosary_endOrder_closingHhqThenOverlayStJosephContrition() {
+        val steps = GuidedStepBuilder.buildRosarySteps(rosary, "Glorious", includeAfterRosary = true)
+        val last = steps.takeLast(8)
+        val titles = last.map { "${it.subtitle}: ${it.title}" }
+        // Expect: ... Closing HHQ, Closing concluding, then overlay St Joseph + Contrition
+        val closing = steps.filter { it.subtitle == "Closing" }
+        assertTrue(closing.any { it.title.contains("Hail Holy Queen", ignoreCase = true) })
+        assertTrue(closing.any { it.title.contains("concluding", ignoreCase = true) ||
+            it.title.contains("O God", ignoreCase = true) ||
+            it.body.contains("O God", ignoreCase = true) })
+
+        val trailing = steps.filter { it.subtitle == "AFC after-Rosary" }
+        assertEquals(
+            listOf("St. Joseph Prayer after the Rosary", "Act of Contrition"),
+            trailing.map { it.title }
+        )
+        assertEquals(
+            "AFC after-Rosary",
+            steps.last().subtitle
+        )
+        // Dump helper for smoke REPORT (titles only)
+        assertTrue("end dump size", last.size == 8)
+        assertFalse(titles.any { it.contains("All For", ignoreCase = true) && it.startsWith("AFC") })
     }
 
     @Test

@@ -185,9 +185,8 @@
     {
       "order": 8,
       "bead": "optional-afc",
-      "action": "Optional AFC after-Rosary set (All For is per-decade after Fatima, not repeated here)",
+      "action": "Optional AFC after-Rosary set (All For is per-decade after Fatima; Hail Holy Queen is in Closing — not repeated here)",
       "prayerIds": [
-        "hail-holy-queen",
         "st-joseph-after-rosary",
         "act-of-contrition"
       ]
@@ -237,7 +236,7 @@
     }
   },
   "afterRosarySet": {
-    "description": "AFC Prayers after the Rosary as listed in the Disciple Membership Booklet (All For after Fatima Prayer / after decades; then Hail Holy Queen; St. Joseph after Rosary; Act of Contrition).",
+    "description": "AFC Prayers after the Rosary as listed in the Disciple Membership Booklet (All For after Fatima Prayer / after decades; Hail Holy Queen is in standard Closing, not repeated here; then St. Joseph after Rosary; Act of Contrition).",
     "sourceUrl": "https://afc.org/wp-content/uploads/2025/07/323-127_DiscipleMembershipBooklet_2025_LoRes.pdf",
     "prayers": [
       {
@@ -245,12 +244,6 @@
         "title": "All For Consecration Prayer",
         "when": "Say after the Fatima Rosary Prayer (per AFC booklet); also used as short daily renewal",
         "body": "All for the Sacred and Eucharistic Heart of Jesus, all through the Sorrowful and Immaculate Heart of Mary, all in union with St. Joseph."
-      },
-      {
-        "id": "hail-holy-queen",
-        "title": "Hail Holy Queen",
-        "when": "Say after the Rosary",
-        "ref": "prayers.hail-holy-queen"
       },
       {
         "id": "st-joseph-after-rosary",
