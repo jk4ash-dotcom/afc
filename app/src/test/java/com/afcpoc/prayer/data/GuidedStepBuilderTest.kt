@@ -36,8 +36,8 @@ class GuidedStepBuilderTest {
         assertTrue(steps.first().title.contains("Sign", ignoreCase = true) ||
             steps[0].subtitle == "Opening")
 
-        // Opening block before first decade announce
-        val firstAnnounce = steps.indexOfFirst { it.title.startsWith("Announce:") }
+        // Opening block before first decade mystery announce
+        val firstAnnounce = steps.indexOfFirst { it.title.startsWith("The first mystery:") }
         assertTrue(firstAnnounce > 0)
         assertTrue(steps.take(firstAnnounce).all { it.subtitle == "Opening" || it.subtitle?.startsWith("For ") == true })
 
@@ -62,6 +62,27 @@ class GuidedStepBuilderTest {
         assertTrue(steps.any { it.subtitle == "Closing" })
         assertTrue(steps.indexOfLast { it.subtitle?.startsWith("Decade") == true } <
             steps.indexOfFirst { it.subtitle == "Closing" })
+    }
+
+    @Test
+    fun rosary_mysteryAnnounceTitles_useNaturalOrdinals() {
+        val steps = GuidedStepBuilder.buildRosarySteps(rosary, "Joyful", includeAfterRosary = false)
+        val names = rosary.mysterySets["Joyful"]!!.mysteries.map { it.name }
+        val expected = listOf(
+            "The first mystery: ${names[0]}",
+            "The second mystery: ${names[1]}",
+            "The third mystery: ${names[2]}",
+            "The fourth mystery: ${names[3]}",
+            "The fifth mystery: ${names[4]}"
+        )
+        val announces = steps.filter { it.title.contains(" mystery: ") }
+        assertEquals(5, announces.size)
+        assertEquals(expected, announces.map { it.title })
+        // First decade announce dump for smoke REPORT
+        assertEquals("The first mystery: The Annunciation", announces.first().title)
+        assertEquals("Decade 1 of 5 — Joyful", announces.first().subtitle)
+        // No legacy Announce: prefix
+        assertFalse(steps.any { it.title.startsWith("Announce:") })
     }
 
     @Test

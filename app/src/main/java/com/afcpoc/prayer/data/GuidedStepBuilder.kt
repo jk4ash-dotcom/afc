@@ -43,10 +43,12 @@ object GuidedStepBuilder {
         // so it is not duplicated as an end-only 6th copy.
         val allFor = rosary.afterRosarySet?.prayers?.find { it.id == "all-for" }
 
+        val ordinals = listOf("first", "second", "third", "fourth", "fifth")
         set.mysteries.forEachIndexed { decadeIndex, mystery ->
             val decadeLabel = "Decade ${decadeIndex + 1} of 5 — $setName"
+            val ordinal = ordinals.getOrElse(decadeIndex) { "${decadeIndex + 1}th" }
             steps += GuidedStep(
-                title = "Announce: ${mystery.name}",
+                title = "The $ordinal mystery: ${mystery.name}",
                 subtitle = decadeLabel,
                 body = buildString {
                     append(mystery.name)
