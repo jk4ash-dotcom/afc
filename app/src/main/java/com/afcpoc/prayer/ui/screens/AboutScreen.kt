@@ -20,6 +20,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.afcpoc.prayer.BuildConfig
 import com.afcpoc.prayer.R
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -93,7 +94,7 @@ fun AboutScreen(onBack: () -> Unit) {
             )
             Spacer(Modifier.height(24.dp))
             Text(
-                "Version 1.0.4-poc · Package com.afcpoc.prayer",
+                "Version ${BuildConfig.VERSION_NAME} · Package ${BuildConfig.APPLICATION_ID}",
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )

@@ -13,8 +13,8 @@ android {
         applicationId = "com.afcpoc.prayer"
         minSdk = 26
         targetSdk = 35
-        versionCode = 6
-        versionName = "1.0.5-poc"
+        versionCode = 7
+        versionName = "1.0.6-poc"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -39,6 +39,7 @@ android {
 
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 
     sourceSets {
