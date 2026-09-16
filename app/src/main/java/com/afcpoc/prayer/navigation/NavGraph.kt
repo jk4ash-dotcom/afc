@@ -8,6 +8,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.afcpoc.prayer.AfcApp
 import com.afcpoc.prayer.data.ContentRepository
 import com.afcpoc.prayer.ui.screens.AboutScreen
 import com.afcpoc.prayer.ui.screens.AfcDetailScreen
@@ -23,7 +24,10 @@ import com.afcpoc.prayer.ui.screens.RosaryHubScreen
 fun AfcNavGraph() {
     val navController = rememberNavController()
     val context = LocalContext.current
-    val repository = remember { ContentRepository(context.applicationContext) }
+    val repository = remember {
+        runCatching { AfcApp.from(context).repository }
+            .getOrElse { ContentRepository.getInstance(context) }
+    }
 
     NavHost(navController = navController, startDestination = Routes.HOME) {
         composable(Routes.HOME) {

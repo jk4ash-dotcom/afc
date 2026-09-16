@@ -1,5 +1,6 @@
 package com.afcpoc.prayer.ui.screens
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -15,6 +16,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Checkbox
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -24,6 +26,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -32,6 +35,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.afcpoc.prayer.data.ContentRepository
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -43,7 +48,17 @@ fun DivineMercyHubScreen(
 ) {
     var includeOpen by remember { mutableStateOf(true) }
     var includeClose by remember { mutableStateOf(true) }
-    val description = repository.divineMercy.chaplet.description
+    var title by remember { mutableStateOf<String?>(null) }
+    var description by remember { mutableStateOf<String?>(null) }
+
+    LaunchedEffect(repository) {
+        val snapshot = withContext(Dispatchers.Default) {
+            if (!repository.isPreloaded()) repository.preload()
+            repository.divineMercy.title to repository.divineMercy.chaplet.description
+        }
+        title = snapshot.first
+        description = snapshot.second
+    }
 
     Scaffold(
         topBar = {
@@ -57,6 +72,18 @@ fun DivineMercyHubScreen(
             )
         }
     ) { padding ->
+        val titleReady = title
+        if (titleReady == null) {
+            Box(
+                Modifier
+                    .fillMaxSize()
+                    .padding(padding),
+                contentAlignment = Alignment.Center
+            ) {
+                CircularProgressIndicator()
+            }
+            return@Scaffold
+        }
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -65,7 +92,7 @@ fun DivineMercyHubScreen(
                 .padding(20.dp)
         ) {
             Text(
-                repository.divineMercy.title,
+                titleReady,
                 style = MaterialTheme.typography.headlineSmall
             )
             Spacer(Modifier.height(8.dp))

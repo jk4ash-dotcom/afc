@@ -1,6 +1,7 @@
 package com.afcpoc.prayer.ui.screens
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
@@ -18,6 +19,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Checkbox
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Icon
@@ -27,6 +29,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -35,6 +38,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.afcpoc.prayer.data.ContentRepository
+import com.afcpoc.prayer.data.Mystery
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
@@ -43,12 +49,36 @@ fun RosaryHubScreen(
     onBack: () -> Unit,
     onStart: (setName: String, includeAfter: Boolean) -> Unit
 ) {
-    val today = remember { repository.todayMysterySetName() }
-    var selected by remember { mutableStateOf(today) }
+    var today by remember { mutableStateOf<String?>(null) }
+    var selected by remember { mutableStateOf<String?>(null) }
     var includeAfter by remember { mutableStateOf(true) }
-    val sets = remember { repository.mysterySetNames() }
-    val mysteries = repository.rosary.mysterySets[selected]?.mysteries.orEmpty()
-    val dayNote = repository.rosary.mysteriesByDay["notes"]
+    var sets by remember { mutableStateOf<List<String>>(emptyList()) }
+    var dayNote by remember { mutableStateOf<String?>(null) }
+    var mysteriesBySet by remember { mutableStateOf<Map<String, List<Mystery>>>(emptyMap()) }
+
+    LaunchedEffect(repository) {
+        data class HubData(
+            val today: String,
+            val sets: List<String>,
+            val dayNote: String?,
+            val mysteriesBySet: Map<String, List<Mystery>>
+        )
+        val snapshot = withContext(Dispatchers.Default) {
+            if (!repository.isPreloaded()) repository.preload()
+            val t = repository.todayMysterySetName()
+            val names = repository.mysterySetNames()
+            val note = repository.mysteryCalendarNote()
+            val map = names.associateWith { name ->
+                repository.rosary.mysterySets[name]?.mysteries.orEmpty()
+            }
+            HubData(t, names, note, map)
+        }
+        today = snapshot.today
+        selected = snapshot.today
+        sets = snapshot.sets
+        dayNote = snapshot.dayNote
+        mysteriesBySet = snapshot.mysteriesBySet
+    }
 
     Scaffold(
         topBar = {
@@ -62,6 +92,20 @@ fun RosaryHubScreen(
             )
         }
     ) { padding ->
+        val todayReady = today
+        val selectedReady = selected
+        if (todayReady == null || selectedReady == null) {
+            Box(
+                Modifier
+                    .fillMaxSize()
+                    .padding(padding),
+                contentAlignment = Alignment.Center
+            ) {
+                CircularProgressIndicator()
+            }
+            return@Scaffold
+        }
+        val mysteries = mysteriesBySet[selectedReady].orEmpty()
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -70,7 +114,7 @@ fun RosaryHubScreen(
                 .padding(20.dp)
         ) {
             Text(
-                "Today’s mysteries: $today",
+                "Today’s mysteries: $todayReady",
                 style = MaterialTheme.typography.titleMedium,
                 color = MaterialTheme.colorScheme.primary
             )
@@ -92,7 +136,7 @@ fun RosaryHubScreen(
             ) {
                 sets.forEach { name ->
                     FilterChip(
-                        selected = selected == name,
+                        selected = selectedReady == name,
                         onClick = { selected = name },
                         label = { Text(name) }
                     )
@@ -104,7 +148,7 @@ fun RosaryHubScreen(
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Column(Modifier.padding(16.dp)) {
-                    Text("$selected Mysteries", style = MaterialTheme.typography.titleMedium)
+                    Text("$selectedReady Mysteries", style = MaterialTheme.typography.titleMedium)
                     Spacer(Modifier.height(8.dp))
                     mysteries.forEachIndexed { i, m ->
                         Text(
@@ -125,7 +169,7 @@ fun RosaryHubScreen(
             }
             Spacer(Modifier.height(20.dp))
             Button(
-                onClick = { onStart(selected, includeAfter) },
+                onClick = { onStart(selectedReady, includeAfter) },
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text("Begin guided Rosary")
