@@ -15,7 +15,10 @@ data class AfcPrayer(
 data class RosaryContent(
     val title: String,
     val sources: List<String> = emptyList(),
+    /** Day-of-week display name → mystery set name (Joyful/Sorrowful/…). */
     val mysteriesByDay: Map<String, String> = emptyMap(),
+    /** USCCB Advent/Lent Sunday calendar commentary — not a day→set entry. */
+    val mysteryCalendarNotes: String? = null,
     val mysterySets: Map<String, MysterySet> = emptyMap(),
     val beadSequenceTemplate: List<BeadTemplateStep> = emptyList(),
     val prayers: Map<String, RosaryPrayer> = emptyMap(),

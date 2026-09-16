@@ -30,6 +30,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -46,8 +47,8 @@ fun DivineMercyHubScreen(
     onChaplet: (includeOpen: Boolean, includeClose: Boolean) -> Unit,
     onHour: () -> Unit
 ) {
-    var includeOpen by remember { mutableStateOf(true) }
-    var includeClose by remember { mutableStateOf(true) }
+    var includeOpen by rememberSaveable { mutableStateOf(true) }
+    var includeClose by rememberSaveable { mutableStateOf(true) }
     var title by remember { mutableStateOf<String?>(null) }
     var description by remember { mutableStateOf<String?>(null) }
 

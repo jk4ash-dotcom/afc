@@ -33,6 +33,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -50,8 +51,8 @@ fun RosaryHubScreen(
     onStart: (setName: String, includeAfter: Boolean) -> Unit
 ) {
     var today by remember { mutableStateOf<String?>(null) }
-    var selected by remember { mutableStateOf<String?>(null) }
-    var includeAfter by remember { mutableStateOf(true) }
+    var selected by rememberSaveable { mutableStateOf<String?>(null) }
+    var includeAfter by rememberSaveable { mutableStateOf(true) }
     var sets by remember { mutableStateOf<List<String>>(emptyList()) }
     var dayNote by remember { mutableStateOf<String?>(null) }
     var mysteriesBySet by remember { mutableStateOf<Map<String, List<Mystery>>>(emptyMap()) }
@@ -74,7 +75,7 @@ fun RosaryHubScreen(
             HubData(t, names, note, map)
         }
         today = snapshot.today
-        selected = snapshot.today
+        if (selected == null) selected = snapshot.today
         sets = snapshot.sets
         dayNote = snapshot.dayNote
         mysteriesBySet = snapshot.mysteriesBySet

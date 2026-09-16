@@ -11,6 +11,11 @@ import java.util.concurrent.atomic.AtomicBoolean
 /**
  * Loads prayer JSON from assets. Prefer [preload] / [getInstance] so decode
  * and guided-step list construction happen off the main thread (IO/Default).
+ *
+ * Readiness is split:
+ * - [areAssetsReady] — JSON decoded into caches
+ * - [areStepsWarmed] — default guided step lists built
+ * - [isPreloaded] — both true (never claims loaded while only assets are ready)
  */
 class ContentRepository private constructor(private val context: Context) {
 
@@ -19,7 +24,9 @@ class ContentRepository private constructor(private val context: Context) {
         isLenient = true
     }
 
-    private val loaded = AtomicBoolean(false)
+    private val assetsReady = AtomicBoolean(false)
+    private val stepsWarmed = AtomicBoolean(false)
+    private val warmLock = Any()
 
     @Volatile
     private var afcPrayersCache: List<AfcPrayer>? = null
@@ -37,6 +44,7 @@ class ContentRepository private constructor(private val context: Context) {
         get() = afcPrayersCache ?: synchronized(this) {
             afcPrayersCache ?: loadAsset<List<AfcPrayer>>("afc_prayers.json").also {
                 afcPrayersCache = it
+                maybeMarkAssetsReadyLocked()
             }
         }
 
@@ -44,6 +52,7 @@ class ContentRepository private constructor(private val context: Context) {
         get() = rosaryCache ?: synchronized(this) {
             rosaryCache ?: loadAsset<RosaryContent>("rosary.json").also {
                 rosaryCache = it
+                maybeMarkAssetsReadyLocked()
             }
         }
 
@@ -51,35 +60,77 @@ class ContentRepository private constructor(private val context: Context) {
         get() = divineMercyCache ?: synchronized(this) {
             divineMercyCache ?: loadAsset<DivineMercyContent>("divine_mercy.json").also {
                 divineMercyCache = it
+                maybeMarkAssetsReadyLocked()
             }
         }
 
     /**
      * Decode all JSON assets and warm default guided step lists.
      * Call from [Dispatchers.IO] / Default — never the main thread.
+     *
+     * Does not set [isPreloaded] until step warm finishes. Cache misses that
+     * still build on Default are fine; the flag must not claim full load early.
      */
     fun preload() {
-        if (loaded.get()) return
-        synchronized(this) {
-            if (loaded.get()) return
-            afcPrayersCache = loadAsset("afc_prayers.json")
-            rosaryCache = loadAsset("rosary.json")
-            divineMercyCache = loadAsset("divine_mercy.json")
-            loaded.set(true)
-        }
-        val today = todayMysterySetName()
-        cachedRosarySteps(today, includeAfterRosary = true)
-        mysterySetNames().forEach { name ->
-            cachedRosarySteps(name, includeAfterRosary = true)
-            cachedRosarySteps(name, includeAfterRosary = false)
-        }
-        cachedChapletSteps(includeOptionalOpenings = true, includeOptionalClosings = true)
-        cachedChapletSteps(includeOptionalOpenings = false, includeOptionalClosings = false)
-        cachedChapletSteps(includeOptionalOpenings = true, includeOptionalClosings = false)
-        cachedChapletSteps(includeOptionalOpenings = false, includeOptionalClosings = true)
+        ensureAssetsLoaded()
+        warmDefaultSteps()
     }
 
-    fun isPreloaded(): Boolean = loaded.get()
+    /** JSON assets decoded (step lists may still be cold). */
+    fun areAssetsReady(): Boolean = assetsReady.get()
+
+    /** Default guided step lists have been warmed into cache. */
+    fun areStepsWarmed(): Boolean = stepsWarmed.get()
+
+    /** True only when assets are ready *and* default steps have been warmed. */
+    fun isPreloaded(): Boolean = assetsReady.get() && stepsWarmed.get()
+
+    private fun ensureAssetsLoaded() {
+        if (assetsReady.get() &&
+            afcPrayersCache != null &&
+            rosaryCache != null &&
+            divineMercyCache != null
+        ) {
+            return
+        }
+        synchronized(this) {
+            if (afcPrayersCache == null) {
+                afcPrayersCache = loadAsset("afc_prayers.json")
+            }
+            if (rosaryCache == null) {
+                rosaryCache = loadAsset("rosary.json")
+            }
+            if (divineMercyCache == null) {
+                divineMercyCache = loadAsset("divine_mercy.json")
+            }
+            assetsReady.set(true)
+        }
+    }
+
+    private fun maybeMarkAssetsReadyLocked() {
+        if (afcPrayersCache != null && rosaryCache != null && divineMercyCache != null) {
+            assetsReady.set(true)
+        }
+    }
+
+    private fun warmDefaultSteps() {
+        if (stepsWarmed.get()) return
+        synchronized(warmLock) {
+            if (stepsWarmed.get()) return
+            ensureAssetsLoaded()
+            val today = todayMysterySetName()
+            cachedRosarySteps(today, includeAfterRosary = true)
+            mysterySetNames().forEach { name ->
+                cachedRosarySteps(name, includeAfterRosary = true)
+                cachedRosarySteps(name, includeAfterRosary = false)
+            }
+            cachedChapletSteps(includeOptionalOpenings = true, includeOptionalClosings = true)
+            cachedChapletSteps(includeOptionalOpenings = false, includeOptionalClosings = false)
+            cachedChapletSteps(includeOptionalOpenings = true, includeOptionalClosings = false)
+            cachedChapletSteps(includeOptionalOpenings = false, includeOptionalClosings = true)
+            stepsWarmed.set(true)
+        }
+    }
 
     private inline fun <reified T> loadAsset(name: String): T {
         val text = context.assets.open(name).bufferedReader().use { it.readText() }
@@ -94,17 +145,16 @@ class ContentRepository private constructor(private val context: Context) {
     fun todayMysterySetName(): String {
         val dayName = LocalDate.now().dayOfWeek.getDisplayName(TextStyle.FULL, Locale.ENGLISH)
         val mapped = rosary.mysteriesByDay[dayName]
-        // "notes" is calendar commentary stuffed into mysteriesByDay — never a set name
-        return if (mapped.isNullOrBlank() || mapped.equals("notes", ignoreCase = true)) {
+        return if (mapped.isNullOrBlank()) {
             "Glorious"
         } else {
             mapped
         }
     }
 
-    /** USCCB Advent/Lent Sunday note; not a mystery-set key. */
+    /** USCCB Advent/Lent Sunday note; dedicated field, not a mystery-set key. */
     fun mysteryCalendarNote(): String? =
-        rosary.mysteriesByDay["notes"]?.takeIf { it.isNotBlank() }
+        rosary.mysteryCalendarNotes?.takeIf { it.isNotBlank() }
 
     fun mysterySetNames(): List<String> = listOf("Joyful", "Sorrowful", "Glorious", "Luminous")
 

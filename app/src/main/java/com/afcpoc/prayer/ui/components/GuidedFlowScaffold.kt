@@ -24,6 +24,8 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.LocalView
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -39,6 +41,14 @@ fun GuidedFlowScaffold(
     onBack: () -> Unit,
     onFinished: () -> Unit = onBack
 ) {
+    // Keep display awake during guided Rosary / Chaplet; clears when leaving this composition.
+    val view = LocalView.current
+    DisposableEffect(Unit) {
+        val previous = view.keepScreenOn
+        view.keepScreenOn = true
+        onDispose { view.keepScreenOn = previous }
+    }
+
     val step = steps.getOrNull(index)
     val progress = if (steps.isEmpty()) 0f else (index + 1).toFloat() / steps.size
 

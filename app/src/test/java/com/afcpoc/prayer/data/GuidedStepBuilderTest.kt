@@ -148,9 +148,19 @@ class GuidedStepBuilderTest {
     }
 
     @Test
-    fun mysteriesByDay_notes_is_not_a_set() {
-        assertTrue(rosary.mysteriesByDay.containsKey("notes"))
+    fun mysteryCalendarNotes_is_dedicated_not_day_map_key() {
+        assertFalse(
+            "notes must not live in mysteriesByDay",
+            rosary.mysteriesByDay.containsKey("notes")
+        )
         assertFalse(rosary.mysterySets.containsKey("notes"))
+        assertTrue(
+            !rosary.mysteryCalendarNotes.isNullOrBlank()
+        )
+        assertTrue(
+            rosary.mysteryCalendarNotes!!.contains("Advent", ignoreCase = true) ||
+                rosary.mysteryCalendarNotes!!.contains("Lent", ignoreCase = true)
+        )
         listOf("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday").forEach { day ->
             val set = rosary.mysteriesByDay[day]
             assertTrue("$day -> $set", set in setOf("Joyful", "Sorrowful", "Glorious", "Luminous"))

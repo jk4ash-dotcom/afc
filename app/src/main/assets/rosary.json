@@ -13,8 +13,7 @@
     "Thursday": "Luminous",
     "Friday": "Sorrowful",
     "Saturday": "Joyful",
-    "Sunday": "Glorious",
-    "notes": "USCCB also notes: Joyful on Sundays of Advent; Sorrowful on Sundays of Lent; Glorious on Sundays outside Advent and Lent."
+    "Sunday": "Glorious"
   },
   "mysterySets": {
     "Joyful": {
@@ -263,5 +262,6 @@
         "body": "Oh my God! I am heartily sorry for having offended Thee, and I detest all of my sins, because I dread the loss of Heaven and the pains of hell, but most of all because they have offended Thee, my God, who art all-good and deserving of all my love. I firmly resolve with the help of Thy grace, to confess my sins, to do penance, to amend my life. Amen."
       }
     ]
-  }
+  },
+  "mysteryCalendarNotes": "USCCB also notes: Joyful on Sundays of Advent; Sorrowful on Sundays of Lent; Glorious on Sundays outside Advent and Lent."
 }
