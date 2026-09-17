@@ -4,10 +4,13 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -41,7 +44,7 @@ fun GuidedFlowScaffold(
     onBack: () -> Unit,
     onFinished: () -> Unit = onBack
 ) {
-    // Keep display awake during guided Rosary / Chaplet; clears when leaving this composition.
+    // Keep display awake during guided Rosary; clears when leaving this composition.
     val view = LocalView.current
     DisposableEffect(Unit) {
         val previous = view.keepScreenOn
@@ -53,6 +56,7 @@ fun GuidedFlowScaffold(
     val progress = if (steps.isEmpty()) 0f else (index + 1).toFloat() / steps.size
 
     Scaffold(
+        contentWindowInsets = WindowInsets.safeDrawing,
         topBar = {
             TopAppBar(
                 title = { Text(screenTitle) },
@@ -67,9 +71,12 @@ fun GuidedFlowScaffold(
             )
         },
         bottomBar = {
+            // With enableEdgeToEdge, Scaffold bottomBar draws under the system nav /
+            // gesture bar unless we add navigationBarsPadding so Prev/Next stay tappable.
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
+                    .navigationBarsPadding()
                     .padding(16.dp)
             ) {
                 LinearProgressIndicator(

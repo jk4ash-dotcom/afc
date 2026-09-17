@@ -34,11 +34,7 @@ class ContentRepository private constructor(private val context: Context) {
     @Volatile
     private var rosaryCache: RosaryContent? = null
 
-    @Volatile
-    private var divineMercyCache: DivineMercyContent? = null
-
     private val rosaryStepsCache = ConcurrentHashMap<String, List<GuidedStep>>()
-    private val chapletStepsCache = ConcurrentHashMap<String, List<GuidedStep>>()
 
     val afcPrayers: List<AfcPrayer>
         get() = afcPrayersCache ?: synchronized(this) {
@@ -52,14 +48,6 @@ class ContentRepository private constructor(private val context: Context) {
         get() = rosaryCache ?: synchronized(this) {
             rosaryCache ?: loadAsset<RosaryContent>("rosary.json").also {
                 rosaryCache = it
-                maybeMarkAssetsReadyLocked()
-            }
-        }
-
-    val divineMercy: DivineMercyContent
-        get() = divineMercyCache ?: synchronized(this) {
-            divineMercyCache ?: loadAsset<DivineMercyContent>("divine_mercy.json").also {
-                divineMercyCache = it
                 maybeMarkAssetsReadyLocked()
             }
         }
@@ -88,8 +76,7 @@ class ContentRepository private constructor(private val context: Context) {
     private fun ensureAssetsLoaded() {
         if (assetsReady.get() &&
             afcPrayersCache != null &&
-            rosaryCache != null &&
-            divineMercyCache != null
+            rosaryCache != null
         ) {
             return
         }
@@ -100,15 +87,12 @@ class ContentRepository private constructor(private val context: Context) {
             if (rosaryCache == null) {
                 rosaryCache = loadAsset("rosary.json")
             }
-            if (divineMercyCache == null) {
-                divineMercyCache = loadAsset("divine_mercy.json")
-            }
             assetsReady.set(true)
         }
     }
 
     private fun maybeMarkAssetsReadyLocked() {
-        if (afcPrayersCache != null && rosaryCache != null && divineMercyCache != null) {
+        if (afcPrayersCache != null && rosaryCache != null) {
             assetsReady.set(true)
         }
     }
@@ -124,10 +108,6 @@ class ContentRepository private constructor(private val context: Context) {
                 cachedRosarySteps(name, includeAfterRosary = true)
                 cachedRosarySteps(name, includeAfterRosary = false)
             }
-            cachedChapletSteps(includeOptionalOpenings = true, includeOptionalClosings = true)
-            cachedChapletSteps(includeOptionalOpenings = false, includeOptionalClosings = false)
-            cachedChapletSteps(includeOptionalOpenings = true, includeOptionalClosings = false)
-            cachedChapletSteps(includeOptionalOpenings = false, includeOptionalClosings = true)
             stepsWarmed.set(true)
         }
     }
@@ -163,28 +143,8 @@ class ContentRepository private constructor(private val context: Context) {
         return rosaryStepsCache.getOrPut(key) { buildRosarySteps(setName, includeAfterRosary) }
     }
 
-    fun cachedChapletSteps(
-        includeOptionalOpenings: Boolean,
-        includeOptionalClosings: Boolean
-    ): List<GuidedStep> {
-        val key = "$includeOptionalOpenings|$includeOptionalClosings"
-        return chapletStepsCache.getOrPut(key) {
-            buildChapletSteps(includeOptionalOpenings, includeOptionalClosings)
-        }
-    }
-
     fun buildRosarySteps(setName: String, includeAfterRosary: Boolean): List<GuidedStep> =
         GuidedStepBuilder.buildRosarySteps(rosary, setName, includeAfterRosary)
-
-    fun buildChapletSteps(
-        includeOptionalOpenings: Boolean,
-        includeOptionalClosings: Boolean
-    ): List<GuidedStep> =
-        GuidedStepBuilder.buildChapletSteps(
-            divineMercy,
-            includeOptionalOpenings,
-            includeOptionalClosings
-        )
 
     companion object {
         @Volatile

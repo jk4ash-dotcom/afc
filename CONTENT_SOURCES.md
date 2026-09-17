@@ -1,6 +1,6 @@
 # AFC Prayer Content — Sources
 
-Offline Android POC content for Apostolate for Family Consecration (AFC).  
+Offline Android POC content for Apostolate for Family Consecration (AFC). App ships AFC prayers + Rosary only.  
 Fetched: 2026-09-15 (America/New_York). Prayer bodies are transcribed from the URLs below; theological wording was not invented.
 
 ## Files
@@ -8,7 +8,6 @@ Fetched: 2026-09-15 (America/New_York). Prayer bodies are transcribed from the U
 | File | Contents |
 |------|----------|
 | `afc_prayers.json` | 16 AFC daily / consecration / optional prayers |
-| `divine_mercy.json` | Divine Mercy Chaplet bead steps + Hour of Great Mercy |
 | `rosary.json` | Mysteries by day (incl. Luminous), bead template, traditional prayer texts, AFC after-Rosary set |
 | `SOURCES.md` | This file |
 
@@ -34,7 +33,9 @@ Fetched: 2026-09-15 (America/New_York). Prayer bodies are transcribed from the U
    Source for: confirmation of Six Daily Prayers; All For Consecration Prayer after Rosary; Hail Holy Queen (after Rosary); St. Joseph Prayer after the Rosary; Act of Contrition (AFC form); Purgatory petition; Angelus; Regina Caeli; Act of Spiritual Communion; Cardinal Mercier Holy Spirit prayer; booklet’s short Chaplet of Divine Mercy outline.  
    PDF also lists (by title) the six daily prayers matching the website texts.
 
-### Divine Mercy (Marian Fathers / USCCB)
+### Divine Mercy (not shipped in this POC)
+
+Divine Mercy Chaplet / Hour content was removed from the app (official DM apps preferred). Historical source URLs used during early POC research:
 
 5. **https://www.thedivinemercy.org/message/devotions/pray-the-chaplet**  
    Official Marian Fathers “How to Recite the Chaplet of The Divine Mercy.”  
@@ -66,7 +67,7 @@ Fetched: 2026-09-15 (America/New_York). Prayer bodies are transcribed from the U
 
 2. **Minor textual variants between AFC website and PDF** — e.g. Magnificat punctuation/line breaks; “Will” vs “will”; “Patron Saints” capitalization; “the Apostolate” vs “the apostolate”; St. Joseph Prayer comma after “St. Joseph”. Website versions preferred for entries whose `sourceUrl` is the daily-prayers page; PDF preferred for after-Rosary / optional booklet-only prayers. Bodies are authentic in both cases.
 
-3. **St. Faustina optional longer opening/closing** — Included in `divine_mercy.json` as optional (from Marian Fathers official Chaplet page). Core chaplet works without them.
+3. **Divine Mercy JSON** — Removed from the shipped app; not bundled in assets.
 
 4. **Individual USCCB prayer landing pages** (`/prayers/apostles-creed`, `/prayers/our-father`, etc.) — Fetch returned incomplete/non-prayer shells in this environment; full texts were taken from Marian Fathers Chaplet page and USCCB Rosary/Chaplet how-to pages instead.
 

@@ -90,12 +90,6 @@ fun AfcDetailScreen(
                 p.title,
                 style = MaterialTheme.typography.headlineSmall
             )
-            Spacer(Modifier.height(8.dp))
-            Text(
-                p.category.replace('-', ' ').replaceFirstChar { it.uppercase() },
-                style = MaterialTheme.typography.labelLarge,
-                color = MaterialTheme.colorScheme.primary
-            )
             Spacer(Modifier.height(20.dp))
             PrayerBodyText(p.body)
             p.sourceUrl?.let { url ->

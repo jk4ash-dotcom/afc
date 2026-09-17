@@ -13,10 +13,7 @@ import com.afcpoc.prayer.data.ContentRepository
 import com.afcpoc.prayer.ui.screens.AboutScreen
 import com.afcpoc.prayer.ui.screens.AfcDetailScreen
 import com.afcpoc.prayer.ui.screens.AfcListScreen
-import com.afcpoc.prayer.ui.screens.DivineMercyChapletScreen
-import com.afcpoc.prayer.ui.screens.DivineMercyHubScreen
 import com.afcpoc.prayer.ui.screens.HomeScreen
-import com.afcpoc.prayer.ui.screens.HourOfGreatMercyScreen
 import com.afcpoc.prayer.ui.screens.RosaryFlowScreen
 import com.afcpoc.prayer.ui.screens.RosaryHubScreen
 
@@ -34,7 +31,6 @@ fun AfcNavGraph() {
             HomeScreen(
                 onAfc = { navController.navigate(Routes.AFC_LIST) },
                 onRosary = { navController.navigate(Routes.ROSARY_HUB) },
-                onDivineMercy = { navController.navigate(Routes.DM_HUB) },
                 onAbout = { navController.navigate(Routes.ABOUT) }
             )
         }
@@ -77,36 +73,6 @@ fun AfcNavGraph() {
             RosaryFlowScreen(
                 setName = entry.arguments?.getString("setName") ?: "Joyful",
                 includeAfter = entry.arguments?.getBoolean("includeAfter") ?: true,
-                repository = repository,
-                onBack = { navController.popBackStack() }
-            )
-        }
-        composable(Routes.DM_HUB) {
-            DivineMercyHubScreen(
-                repository = repository,
-                onBack = { navController.popBackStack() },
-                onChaplet = { open, close ->
-                    navController.navigate(Routes.dmChaplet(open, close))
-                },
-                onHour = { navController.navigate(Routes.DM_HOUR) }
-            )
-        }
-        composable(
-            route = Routes.DM_CHAPLET,
-            arguments = listOf(
-                navArgument("includeOpen") { type = NavType.BoolType },
-                navArgument("includeClose") { type = NavType.BoolType }
-            )
-        ) { entry ->
-            DivineMercyChapletScreen(
-                includeOpen = entry.arguments?.getBoolean("includeOpen") ?: true,
-                includeClose = entry.arguments?.getBoolean("includeClose") ?: true,
-                repository = repository,
-                onBack = { navController.popBackStack() }
-            )
-        }
-        composable(Routes.DM_HOUR) {
-            HourOfGreatMercyScreen(
                 repository = repository,
                 onBack = { navController.popBackStack() }
             )

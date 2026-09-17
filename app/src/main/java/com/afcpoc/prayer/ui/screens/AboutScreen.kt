@@ -57,8 +57,8 @@ fun AboutScreen(onBack: () -> Unit) {
             )
             Spacer(Modifier.height(20.dp))
             Text(
-                "This offline-first proof of concept helps families pray AFC prayers, " +
-                    "the Holy Rosary (including Luminous Mysteries), and the Divine Mercy Chaplet " +
+                "This offline-first proof of concept helps families pray AFC prayers and " +
+                    "the Holy Rosary (including Luminous Mysteries) " +
                     "without a network connection for core content.",
                 style = MaterialTheme.typography.bodyLarge
             )
@@ -66,8 +66,8 @@ fun AboutScreen(onBack: () -> Unit) {
             Text("Content attribution", style = MaterialTheme.typography.titleMedium)
             Spacer(Modifier.height(8.dp))
             Text(
-                "Prayer texts are transcribed from Apostolate for Family Consecration (afc.org), " +
-                    "the Marian Fathers (thedivinemercy.org), and the USCCB. " +
+                "Prayer texts are transcribed from Apostolate for Family Consecration (afc.org) " +
+                    "and the USCCB. " +
                     "See CONTENT_SOURCES.md / SOURCES.md in the project for URLs, fetch dates, " +
                     "and noted gaps (e.g. Glory Be traditional English form).",
                 style = MaterialTheme.typography.bodyMedium,
@@ -79,7 +79,6 @@ fun AboutScreen(onBack: () -> Unit) {
             Text(
                 "• Offline AFC prayer list & detail\n" +
                     "• Guided Rosary bead flow with mysteries by day\n" +
-                    "• Guided Divine Mercy Chaplet + Hour of Great Mercy\n" +
                     "• Large, readable type; Next / Previous with progress",
                 style = MaterialTheme.typography.bodyMedium
             )

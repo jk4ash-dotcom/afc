@@ -12,13 +12,10 @@ class GuidedStepBuilderTest {
     companion object {
         private val json = Json { ignoreUnknownKeys = true; isLenient = true }
         lateinit var rosary: RosaryContent
-        lateinit var divineMercy: DivineMercyContent
-
         @JvmStatic
         @BeforeClass
         fun load() {
             rosary = json.decodeFromString(readResource("rosary.json"))
-            divineMercy = json.decodeFromString(readResource("divine_mercy.json"))
         }
 
         private fun readResource(name: String): String {
@@ -205,69 +202,6 @@ class GuidedStepBuilderTest {
         // Dump helper for smoke REPORT (titles only)
         assertTrue("end dump size", last.size == 8)
         assertFalse(titles.any { it.contains("All For", ignoreCase = true) && it.startsWith("AFC") })
-    }
-
-    @Test
-    fun chaplet_core_hasFiveDecades_ofTenBeads() {
-        val steps = GuidedStepBuilder.buildChapletSteps(
-            divineMercy,
-            includeOptionalOpenings = false,
-            includeOptionalClosings = false
-        )
-        assertTrue("expected ~60+ steps, got ${steps.size}", steps.size >= 55)
-        for (d in 1..5) {
-            val decade = steps.filter { it.subtitle == "Decade $d of 5" }
-            val beads = decade.filter { it.progressLabel != null }
-            assertEquals("decade $d bead count", 10, beads.size)
-            beads.forEachIndexed { i, step ->
-                assertEquals("Bead ${i + 1}/10", step.progressLabel)
-                assertTrue(step.title.contains("sorrowful Passion", ignoreCase = true))
-            }
-        }
-        assertFalse(steps.any { it.title.contains("Optional Opening", ignoreCase = true) })
-        assertFalse(steps.any { it.subtitle == "Optional opening" })
-        assertFalse(steps.any { it.subtitle == "Optional closing" })
-    }
-
-    @Test
-    fun chaplet_optionalOpenClose_addDistinctSteps_withoutDuplicateTitles() {
-        val core = GuidedStepBuilder.buildChapletSteps(divineMercy, false, false)
-        val full = GuidedStepBuilder.buildChapletSteps(divineMercy, true, true)
-        assertTrue(full.size > core.size)
-
-        // Short bead openings + longer Faustina opening when enabled
-        val optionalTitles = full.filter {
-            it.title.contains("Optional Opening", ignoreCase = true) ||
-                it.subtitle == "Optional opening"
-        }.map { it.title }
-        assertTrue("expected optional openings, got $optionalTitles", optionalTitles.isNotEmpty())
-        assertEquals(
-            "duplicate optional titles: $optionalTitles",
-            optionalTitles.size,
-            optionalTitles.distinctBy { it.lowercase() }.size
-        )
-
-        // Allow intentional repeats of decade prayers; forbid duplicate optional longer titles
-        val longerOpen = divineMercy.chaplet.optionalLongerOpening?.title
-        if (longerOpen != null) {
-            assertEquals(1, full.count { it.title == longerOpen })
-        }
-        val longerClose = divineMercy.chaplet.optionalLongerClosing?.title
-        if (longerClose != null) {
-            assertEquals(1, full.count { it.title == longerClose })
-        }
-    }
-
-    @Test
-    fun chaplet_decades_come_before_holyGod_conclude() {
-        val steps = GuidedStepBuilder.buildChapletSteps(divineMercy, true, true)
-        val firstDecade = steps.indexOfFirst { it.subtitle == "Decade 1 of 5" }
-        val conclude = steps.indexOfFirst {
-            it.title.contains("Holy God", ignoreCase = true) ||
-                it.title.contains("Conclude", ignoreCase = true)
-        }
-        assertTrue(firstDecade >= 0)
-        assertTrue(conclude > firstDecade)
     }
 
     @Test

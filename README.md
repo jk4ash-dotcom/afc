@@ -1,6 +1,6 @@
 # AFC Prayer Companion (POC)
 
-Offline-first Android app (Kotlin + Jetpack Compose) for praying AFC prayers, the Holy Rosary, and the Divine Mercy Chaplet.
+Offline-first Android app (Kotlin + Jetpack Compose) for praying AFC prayers and the Holy Rosary.
 
 > **Proof of concept for Apostolate for Family Consecration review — not an official AFC product.**
 
@@ -59,10 +59,9 @@ adb install -r app/build/outputs/apk/debug/app-debug.apk
 
 ## v1 features
 
-- Home sections: AFC Prayers, Rosary, Divine Mercy, About
+- Home sections: AFC Prayers, Rosary, About
 - AFC prayer list → scrollable detail (offline JSON)
 - Rosary: mysteries by day (incl. Luminous), guided bead-by-bead with Next/Previous & progress; **All For after each decade's Fatima** (AFC practice, always); optional AFC after-Rosary overlay (St. Joseph, Act of Contrition — HHQ stays in Closing only; All For is per-decade, not end-only)
-- Divine Mercy: guided Chaplet bead flow; Hour of Great Mercy screen
 - Calm, family-friendly UI with large readable type
 - No network calls for core prayer content
 - No audio
@@ -82,9 +81,8 @@ Bundled assets under `app/src/main/assets/`:
 
 - `afc_prayers.json`
 - `rosary.json`
-- `divine_mercy.json`
 
-Sources, URLs, and known gaps are documented in [CONTENT_SOURCES.md](CONTENT_SOURCES.md) (copied from the content pack’s `SOURCES.md`). Texts are transcribed from AFC (afc.org), Marian Fathers (thedivinemercy.org), and USCCB; wording was not invented for doctrine.
+Sources, URLs, and known gaps are documented in [CONTENT_SOURCES.md](CONTENT_SOURCES.md) (copied from the content pack’s `SOURCES.md`). Texts are transcribed from AFC (afc.org) and USCCB; wording was not invented for doctrine.
 
 ## Project layout (high level)
 

@@ -72,58 +72,6 @@ data class AfterRosaryPrayer(
     val ref: String? = null
 )
 
-@Serializable
-data class DivineMercyContent(
-    val title: String,
-    val sources: List<String> = emptyList(),
-    val chaplet: Chaplet,
-    val hourOfGreatMercy: HourOfGreatMercy
-)
-
-@Serializable
-data class Chaplet(
-    val description: String? = null,
-    val beadSteps: List<ChapletStep> = emptyList(),
-    val optionalLongerOpening: OptionalPrayer? = null,
-    val optionalLongerClosing: OptionalPrayer? = null
-)
-
-@Serializable
-data class ChapletStep(
-    val step: Int,
-    val bead: String,
-    val label: String,
-    val repeat: Int = 1,
-    val perDecade: Boolean = false,
-    val text: String
-)
-
-@Serializable
-data class OptionalPrayer(
-    val title: String,
-    val sourceUrl: String? = null,
-    val text: String
-)
-
-@Serializable
-data class HourOfGreatMercy(
-    val title: String,
-    val sourceUrl: String? = null,
-    val diaryQuote: String? = null,
-    val prayers: List<HourPrayer> = emptyList(),
-    val notes: String? = null
-)
-
-@Serializable
-data class HourPrayer(
-    val id: String,
-    val label: String,
-    val text: String? = null,
-    val repeat: Int? = null,
-    val sourceUrl: String? = null,
-    val texts: List<String>? = null
-)
-
 /** One navigable bead/step in a guided flow. */
 data class GuidedStep(
     val title: String,

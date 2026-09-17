@@ -9,7 +9,7 @@ import kotlinx.coroutines.launch
 
 /**
  * Owns the shared [ContentRepository] and prefetches JSON + default guided
- * step lists on [Dispatchers.IO] so first Rosary/Chaplet navigation never
+ * step lists on [Dispatchers.IO] so first Rosary navigation never
  * hits lazy asset decode or large list alloc on the main thread.
  */
 class AfcApp : Application() {

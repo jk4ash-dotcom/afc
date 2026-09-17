@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.automirrored.filled.MenuBook
 import androidx.compose.material.icons.filled.Spa
@@ -35,7 +34,6 @@ import com.afcpoc.prayer.R
 fun HomeScreen(
     onAfc: () -> Unit,
     onRosary: () -> Unit,
-    onDivineMercy: () -> Unit,
     onAbout: () -> Unit
 ) {
     Scaffold(
@@ -75,12 +73,6 @@ fun HomeScreen(
                 subtitle = "Guided bead-by-bead with mysteries by day",
                 icon = Icons.Default.Spa,
                 onClick = onRosary
-            )
-            HomeCard(
-                title = "Divine Mercy",
-                subtitle = "Chaplet & Hour of Great Mercy",
-                icon = Icons.Default.Favorite,
-                onClick = onDivineMercy
             )
             HomeCard(
                 title = "About",
