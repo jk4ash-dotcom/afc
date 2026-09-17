@@ -52,7 +52,7 @@ class GuidedStepBuilderTest {
         assertEquals(10, hail.size)
         hail.forEachIndexed { i, step ->
             assertEquals("Hail Mary (${i + 1} of 10)", step.title)
-            assertEquals("Bead ${i + 1}/10", step.progressLabel)
+            assertEquals(null, step.progressLabel)
         }
 
         // Closing after decades
@@ -78,6 +78,21 @@ class GuidedStepBuilderTest {
         // First decade announce dump for smoke REPORT
         assertEquals("The first mystery: The Annunciation", announces.first().title)
         assertEquals("Decade 1 of 5 — Joyful", announces.first().subtitle)
+        // Body must not echo mystery name (title already has it); keep fruit only
+        announces.forEachIndexed { i, step ->
+            assertFalse(
+                "announce body must not repeat mystery name '${names[i]}'",
+                step.body.contains(names[i])
+            )
+            val fruit = rosary.mysterySets["Joyful"]!!.mysteries[i].fruit
+            if (fruit != null) {
+                assertEquals("Fruit of the Mystery: $fruit", step.body)
+            } else {
+                assertEquals("", step.body)
+            }
+        }
+        // No Bead progressLabel on Hail Mary steps
+        assertFalse(steps.any { it.progressLabel != null && it.progressLabel!!.startsWith("Bead") })
         // No legacy Announce: prefix
         assertFalse(steps.any { it.title.startsWith("Announce:") })
     }

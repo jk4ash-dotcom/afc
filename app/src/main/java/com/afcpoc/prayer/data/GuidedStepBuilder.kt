@@ -50,18 +50,16 @@ object GuidedStepBuilder {
             steps += GuidedStep(
                 title = "The $ordinal mystery: ${mystery.name}",
                 subtitle = decadeLabel,
-                body = buildString {
-                    append(mystery.name)
-                    mystery.fruit?.let { append("\n\nFruit of the Mystery: $it") }
-                }
+                // Title already names the mystery; body keeps fruit only (no name echo).
+                body = mystery.fruit?.let { "Fruit of the Mystery: $it" }.orEmpty()
             )
             steps += GuidedStep(prayerTitle("our-father"), decadeLabel, prayerBody("our-father"))
             repeat(10) { bead ->
                 steps += GuidedStep(
                     title = "Hail Mary (${bead + 1} of 10)",
                     subtitle = decadeLabel,
-                    body = prayerBody("hail-mary"),
-                    progressLabel = "Bead ${bead + 1}/10"
+                    body = prayerBody("hail-mary")
+                    // progressLabel omitted: title already shows "N of 10"
                 )
             }
             steps += GuidedStep(prayerTitle("glory-be"), decadeLabel, prayerBody("glory-be"))
