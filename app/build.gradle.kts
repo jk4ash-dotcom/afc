@@ -13,8 +13,8 @@ android {
         applicationId = "com.afcpoc.prayer"
         minSdk = 26
         targetSdk = 35
-        versionCode = 10
-        versionName = "1.0.9-poc"
+        versionCode = 11
+        versionName = "1.0.10-poc"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -58,12 +58,13 @@ android {
     }
 }
 
-// Belt-and-suspenders: do not pull emoji2 (GMS font fetch) or profileinstaller
-// exported receiver. Manifest tools:node="remove" is the primary control.
+// Keep androidx.emoji2 on the classpath — Compose ui-text subclasses
+// EmojiCompat.InitCallback (DefaultImpl$getFontLoadState$initCallback$1);
+// excluding the AAR causes NoClassDefFoundError at first Text composition
+// (release won't launch). Argus control is tools:node="remove" on
+// InitializationProvider (no EmojiCompatInitializer auto-run / GMS font fetch).
+// Still exclude profileinstaller (exported receiver); strip via manifest too.
 configurations.configureEach {
-    exclude(group = "androidx.emoji2", module = "emoji2")
-    exclude(group = "androidx.emoji2", module = "emoji2-views")
-    exclude(group = "androidx.emoji2", module = "emoji2-views-helper")
     exclude(group = "androidx.profileinstaller", module = "profileinstaller")
 }
 

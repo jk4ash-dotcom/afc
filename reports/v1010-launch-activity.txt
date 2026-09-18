@@ -1,0 +1,15 @@
+  * Task{7c96c83 #11 type=standard A=10195:com.afcpoc.prayer U=0 visible=true visibleRequested=true mode=fullscreen translucent=false sz=1}
+    topResumedActivity=ActivityRecord{d5ad33d u0 com.afcpoc.prayer/.MainActivity t11}
+    * Hist  #0: ActivityRecord{d5ad33d u0 com.afcpoc.prayer/.MainActivity t11}
+      packageName=com.afcpoc.prayer processName=com.afcpoc.prayer
+      app=ProcessRecord{be3a006 8218:com.afcpoc.prayer/u0a195}
+      Intent { flg=0x10000000 cmp=com.afcpoc.prayer/.MainActivity }
+      rootOfTask=true task=Task{7c96c83 #11 type=standard A=10195:com.afcpoc.prayer}
+      taskAffinity=10195:com.afcpoc.prayer
+      mActivityComponent=com.afcpoc.prayer/.MainActivity
+      baseDir=/data/app/~~6vWdRhoAKOGOSac_JG7wjg==/com.afcpoc.prayer-f0sTwzpOALKxz7266qa09g==/base.apk
+      dataDir=/data/user/0/com.afcpoc.prayer
+      windows=[Window{142c489 u0 com.afcpoc.prayer/com.afcpoc.prayer.MainActivity}]
+    Resumed: ActivityRecord{d5ad33d u0 com.afcpoc.prayer/.MainActivity t11}
+  ResumedActivity: ActivityRecord{d5ad33d u0 com.afcpoc.prayer/.MainActivity t11}
+  topDisplayFocusedRootTask=Task{7c96c83 #11 type=standard A=10195:com.afcpoc.prayer}

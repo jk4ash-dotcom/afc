@@ -1,5 +1,7 @@
 # AFC Prayer Companion (POC)
 
+
+**Package:** `com.afcpoc.prayer` · **versionName:** `1.0.10-poc` · **versionCode:** 11
 Offline-first Android app (Kotlin + Jetpack Compose) for praying AFC prayers and the Holy Rosary.
 
 > **Proof of concept for Apostolate for Family Consecration review — not an official AFC product.**
