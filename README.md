@@ -20,11 +20,11 @@ See also [NOTICE](NOTICE) and [CONTENT_SOURCES.md](CONTENT_SOURCES.md).
 3. Select an emulator or device, then **Run** the `app` configuration.
 
 
-## Install the debug APK (quickest)
+## Install the release APK (quickest)
 
-1. Download `app-debug.apk` from the latest [GitHub Release](https://github.com/jk4ash-dotcom/afc/releases).
+1. Download the **release** APK (`afc-prayer-companion-*-release.apk`, `debuggable=false`) from the latest [GitHub Release](https://github.com/jk4ash-dotcom/afc/releases).
 2. On your Android phone: allow install from this source if prompted, then open the APK.
-3. Or with a cable: `adb install -r app-debug.apk`
+3. Or with a cable: `adb install -r afc-prayer-companion-*-release.apk`
 
 Package id: `com.afcpoc.prayer`
 

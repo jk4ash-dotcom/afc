@@ -13,14 +13,17 @@ android {
         applicationId = "com.afcpoc.prayer"
         minSdk = 26
         targetSdk = 35
-        versionCode = 9
-        versionName = "1.0.8-poc"
+        versionCode = 10
+        versionName = "1.0.9-poc"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    // POC: release uses the local debug keystore so we can ship a
+    // non-debuggable APK without a Play App Signing key.
     buildTypes {
         release {
             isMinifyEnabled = false
+            signingConfig = signingConfigs.getByName("debug")
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -55,6 +58,15 @@ android {
     }
 }
 
+// Belt-and-suspenders: do not pull emoji2 (GMS font fetch) or profileinstaller
+// exported receiver. Manifest tools:node="remove" is the primary control.
+configurations.configureEach {
+    exclude(group = "androidx.emoji2", module = "emoji2")
+    exclude(group = "androidx.emoji2", module = "emoji2-views")
+    exclude(group = "androidx.emoji2", module = "emoji2-views-helper")
+    exclude(group = "androidx.profileinstaller", module = "profileinstaller")
+}
+
 dependencies {
     val composeBom = platform("androidx.compose:compose-bom:2024.10.01")
     implementation(composeBom)
@@ -76,8 +88,8 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.3")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.9.0")
 
-    debugImplementation("androidx.compose.ui:ui-tooling")
-    debugImplementation("androidx.compose.ui:ui-test-manifest")
+    // Intentionally NO debugImplementation ui-tooling / ui-test-manifest
+    // (exported PreviewActivity / ComponentActivity surface).
 
     testImplementation("junit:junit:4.13.2")
     testImplementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.3")
